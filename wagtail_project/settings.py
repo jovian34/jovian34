@@ -38,6 +38,23 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
+    'blog',
+
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail',
+
+    'taggit',
+    'modelcluster',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 ROOT_URLCONF = 'wagtail_project.urls'
@@ -80,12 +98,25 @@ WSGI_APPLICATION = 'wagtail_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+if bool(int(os.environ.get("DEVELOP"))):
+    host_name = "localhost"
+else:
+    host_name = "cyllene.jovian34.com"
+
+if bool(int(os.environ.get("WSL"))):
+    host_name = "cyllene.jovian34.com"
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "j34web_django",
+        "USER": "j34web_django",
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        "HOST": host_name,
+        "PORT": "5432",
     }
 }
+
 
 
 # Password validation
@@ -110,11 +141,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "America/Indiana/Indianapolis"
 
 USE_I18N = True
+
+USE_L10N = True
 
 USE_TZ = True
 
@@ -123,8 +156,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "j34main/static/")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+if not bool(int(os.environ.get("DEVELOP"))):
+    # added due to security warnings
+    CSRF_COOKIE_SECURE = True
+
+    SECURE_HSTS_SECONDS = 9999
+
+    SECURE_SSL_REDIRECT = True
+
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+    SECURE_HSTS_PRELOAD = True
+
+    SESSION_COOKIE_SECURE = True
