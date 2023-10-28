@@ -109,13 +109,14 @@ if bool(int(os.environ.get("WSL"))):
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "j34web_django",
-        "USER": "j34web_django",
+        "NAME": "jovian34",
+        "USER": "jovian34",
         "PASSWORD": os.environ.get("DB_PASSWORD"),
         "HOST": host_name,
         "PORT": "5432",
     }
 }
+
 
 
 
@@ -163,6 +164,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "j34main/static/")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+WAGTAILADMIN_BASE_URL = f"{os.getenv('WAGTAIL_ADMIN_WORD')}/"
+WAGTAIL_SITE_NAME = "jovian34 LLC"
 
 
 if not bool(int(os.environ.get("DEVELOP"))):
