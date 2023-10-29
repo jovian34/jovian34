@@ -1,3 +1,4 @@
-/.venv/
+.venv/
 /wagtail_project/.env
 __pycache__
+.vscode/
